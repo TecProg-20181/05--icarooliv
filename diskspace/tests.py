@@ -54,16 +54,17 @@ class TestDiskSpaceMethods(unittest.TestCase):
         self.assertIsNone(show_space_list(directory = '.', depth = 0, order=True))
 
     def show_space_list_test(self):
-        file_tree = {'/home/mock': {'print_size': '2.00Kb','children': [], 'size': 4}}
-        file_tree_node = {'print_size': '2.00Kb', 'children': [], 'size': 4}
+        file_tree = {'/home/test': {'print_size': '1.00Kb','children': [], 'size': 2}}
+        file_tree_node = {'print_size': '1.00Kb', 'children': [], 'size': 2}
         largest_size = 6
-        total_size = 4
+        total_size = 2
 
         caps = StringIO.StringIO()
         sys.stdout = caps
         print_space_list(largest_size, file_tree, path, total_size)
-        result = "  Size   (%)  File\n2.00Kb  100%  {}\n".format(path)
+        result = "  Size   (%)  File\n1.00Kb  100%  {}\n".format(path)
         sys.stdout = sys.__stdout__
+
         self.assertEqual(result, caps.getvalue())
 
     def test_print_tree(self):
@@ -72,7 +73,7 @@ class TestDiskSpaceMethods(unittest.TestCase):
         cmd = 'du '
         path = os.path.abspath('.')
         cmd += path
-        file_tree = {path: {'print_size': '50.00Kb', 'children': [], 'size': 3}}
+        file_tree = {path: {'print_size': '1.00Kb', 'children': [], 'size': 4}}
 
         capturedOutput = StringIO.StringIO()
         sys.stdout = capturedOutput
@@ -80,7 +81,7 @@ class TestDiskSpaceMethods(unittest.TestCase):
         print_tree(file_tree, file_tree[path], path, largest_size, total_size)
         
         sys.stdout = sys.__stdout__
-        self.assertEqual('50.00Kb   75%  '+ path, capturedOutput.getvalue().strip())
+        self.assertEqual('1.00Kb  100%  '+ path, capturedOutput.getvalue().strip())
 
 if __name__ == '__main__':
     unittest.main()
